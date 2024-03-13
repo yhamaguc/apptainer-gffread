@@ -1,0 +1,23 @@
+BootStrap: docker
+From: ubuntu:20.04
+
+%labels
+  Maintainer yhamaguc@ncc.go.jp
+
+%apprun gffread
+  exec gffread "${@}"
+
+%post
+  VER_GFFREAD=0.12.7 && \
+  DEBIAN_FRONTEND=noninteractive && \
+  apt update && \
+  apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl && \
+  rm -rf /var/lib/apt/lists/* && \
+  cd /tmp && \
+  curl -LO https://github.com/gpertea/gffread/releases/download/v${VER_GFFREAD}/gffread-${VER_GFFREAD}.Linux_x86_64.tar.gz && \
+  tar -zxvf gffread-${VER_GFFREAD}.Linux_x86_64.tar.gz && \
+  cp gffread-${VER_GFFREAD}.Linux_x86_64/gffread /usr/local/bin && \
+  rm gffread-${VER_GFFREAD}.Linux_x86_64.tar.gz  && \
+  rm -rf gffread-${VER_GFFREAD}.Linux_x86_64
